@@ -12,7 +12,7 @@ def train():
     x_train, y_train, _, _ = dr.get_data()
     x_train = x_train.reshape(x_train.shape[0], -1)
     y_train = y_train.reshape(-1,1)
-    for t in range(300):
+    for t in range(100):
         y_train_pred = model(x_train)
         loss = criterion(y_train_pred, y_train)
         #print("Epoch ", t, "MSE: ", loss.item())
@@ -35,13 +35,14 @@ def test():
     y_test_pred = model(x_test)
     loss = criterion(y_test_pred, y_test).item()
     print(f"Test Loss {loss:.2f}")
-    plt.plot(y_test.squeeze().detach().numpy(), label = "Original")
-    plt.plot(y_test_pred.squeeze().detach().numpy(), label = "Predicted")
-    plt.legend()
-    plt.show()
+    # plt.plot(y_test.squeeze().detach().numpy(), label = "Original")
+    # plt.plot(y_test_pred.squeeze().detach().numpy(), label = "Predicted")
+    # plt.legend()
+    # plt.show()
 
 
 def gen_sal(data, y_true):
+    criterion = torch.nn.MSELoss(reduction='mean')
     print("Generating saliency")
     model = torch.load("models/machine2.h5")
     model.train()
@@ -49,6 +50,7 @@ def gen_sal(data, y_true):
     data.requires_grad = True
     y_pred = model(data)
     loss = criterion(y_pred, y_true)
+    print(f"Case Loss {loss.item():.6f}")
     loss.backward()
     x = torch.abs(data.grad)
 
@@ -61,7 +63,7 @@ def gen_sal(data, y_true):
     plt.plot(x)
     plt.show()
 
-if __name__ == "__main__":
+def run_full_cycle():
     train()
     test()
     model = torch.load("models/machine2.h5")
@@ -71,15 +73,12 @@ if __name__ == "__main__":
     _, _, x_test, y_test = dr.get_data()
     x_test = x_test.reshape(x_test.shape[0], -1)
     y_test = y_test.reshape(-1, 1)
-    items = 0
 
-    for i in range(len(y_test)):
-        current_x = x_test[i].unsqueeze(dim=0)
-        current_y = y_test[i].unsqueeze(dim=0)
-        y_test_pred = model(current_x)
-        loss = criterion(y_test_pred, current_y).item()
-        if loss < 0.1:
-            gen_sal(current_x, current_y)
-            break
+    current_x = x_test[0].unsqueeze(dim=0)
+    current_y = y_test[0].unsqueeze(dim=0)
+    gen_sal(current_x, current_y)
 
 
+if __name__ == "__main__":
+    for i in range(5):
+        run_full_cycle()

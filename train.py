@@ -9,11 +9,11 @@ def train():
 
     model = Machine()
     criterion = torch.nn.MSELoss(reduction='mean')
-    optimiser = torch.optim.Adam(model.parameters(), lr=0.1)
+    optimiser = torch.optim.Adam(model.parameters(), lr=0.01)
     dr = DataReader()
     x_train, y_train, _, _ = dr.get_data()
     y_train = y_train.reshape(-1,1)
-    for t in range(100):
+    for t in range(1000):
         y_train_pred = model(x_train)
         loss = criterion(y_train_pred, y_train)
         print("Epoch ", t, "MSE: ", loss.item())

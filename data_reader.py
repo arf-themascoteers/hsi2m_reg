@@ -1,10 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
-import numpy as np
 import torch
-import torch.nn as nn
-from datetime import datetime
-
 
 
 class DataReader:
@@ -17,8 +13,7 @@ class DataReader:
             self.moisture[index] = row[2]
             self.bands[index] = torch.tensor(row[4:])
 
-        self.moisture_scaler = MinMaxScaler(feature_range=(-1, 1))
-        self.temperature_scaler = MinMaxScaler(feature_range=(-1, 1))
+        self.moisture_scaler = MinMaxScaler(feature_range=(0, 1))
 
         temporary_moisture = self.moisture.reshape(-1,1)
         temporary_moisture = self.moisture_scaler.fit_transform(temporary_moisture)
@@ -26,7 +21,7 @@ class DataReader:
 
         self.data_size = len(self.moisture)
 
-        test_set_size = int(0.3 * self.data_size)
+        test_set_size = int(0.4 * self.data_size)
         train_set_size = self.data_size - test_set_size
 
         self.x_train = self.bands[0:train_set_size]

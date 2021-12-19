@@ -4,11 +4,12 @@ import torch.nn as nn
 class Machine(nn.Module):
     def __init__(self):
         super(Machine, self).__init__()
-        self.fc = nn.Sequential(
-            nn.Linear(125,16),
-            nn.LeakyReLU(),
-            nn.Linear(16,1)
-        )
+        self.fc1 = nn.Linear(125,16)
+        self.relu1 = nn.LeakyReLU()
+        self.fc2 = nn.Linear(16, 1)
 
     def forward(self, x):
-        return self.fc(x)
+        x = self.fc1(x)
+        x = self.relu1(x)
+        x = self.fc2(x)
+        return x

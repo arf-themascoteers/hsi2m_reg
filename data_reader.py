@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 import torch
-
+from sklearn import model_selection
 
 class DataReader:
     def __init__(self):
@@ -19,16 +19,11 @@ class DataReader:
         temporary_moisture = self.moisture_scaler.fit_transform(temporary_moisture)
         self.moisture = torch.tensor(temporary_moisture[:,0], dtype=torch.float32)
 
-        self.data_size = len(self.moisture)
+        self.x_train, self.x_test, self.y_train, self.y_test = model_selection.train_test_split(self.bands,
+                                                                                                        self.moisture,
+                                                                                                        test_size=0.4,
+                                                                                                        random_state=11)
 
-        test_set_size = int(0.4 * self.data_size)
-        train_set_size = self.data_size - test_set_size
-
-        self.x_train = self.bands[0:train_set_size]
-        self.y_train = self.moisture[0:train_set_size]
-
-        self.x_test = self.bands[train_set_size:]
-        self.y_test = self.moisture[train_set_size:]
 
     def get_data(self):
         return self.x_train, self.y_train, self.x_test, self.y_test

@@ -4,10 +4,14 @@ from data_reader import DataReader
 
 
 def plot(y, y_pred):
-    plt.plot(y, label="Original")
-    plt.plot(y_pred, 'r', label="Prediction" )
+    x = list(range(len(y)))
+    plt.scatter(x, y, label="Original")
     plt.legend()
     plt.show()
+    plt.scatter(x, y_pred, label="Prediction" )
+    plt.legend()
+    plt.show()
+
 
 
 if __name__ == "__main__":

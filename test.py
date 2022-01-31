@@ -1,6 +1,4 @@
 import torch
-import train
-import plotter
 from data_reader import DataReader
 
 def test():

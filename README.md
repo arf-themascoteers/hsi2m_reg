@@ -1,14 +1,12 @@
-#Use
+**Use**
 
 pip install -r requirements.txt
 
 Run main.py
 
-#Data
+**Data**
 
 https://publikationen.bibliothek.kit.edu/1000084164
-
-#Sensors
 
 **Camera**: (**In-situ**) Cubert UHD 285 hyperspectral snapshot camera recording 50 by 50 images with 125 spectral bands ranging from 450 nm to 950 nm and a spectral resolution of 4 nm.
 
